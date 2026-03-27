@@ -106,26 +106,37 @@ cp .env.example .env
 
 ### 5b. Fill in your values
 
-Open `.env` in VS Code (or any text editor) and fill in the following:
+Open `.env` in VS Code (or any text editor). The file has the following variables:
+
+**Required — the agent cannot function without these:**
 
 | Variable | Description |
 |---|---|
 | `DSP_HOST` | Your Datasphere tenant URL, e.g. `https://your-tenant.us21.hcs.cloud.sap` |
-| `DSP_CLIENT_ID` | OAuth client ID from SAP BTP cockpit |
-| `DSP_CLIENT_SECRET` | OAuth client secret from SAP BTP cockpit |
-| `DSP_AUTHORIZATION_URL` | OAuth authorization endpoint (from BTP service binding) |
-| `DSP_TOKEN_URL` | OAuth token endpoint (from BTP service binding) |
-| `DSP_AUTHORIZATION_FLOW` | Leave as `authorization_code` for browser-based login |
-| `DSP_BROWSER` | Browser to use for OAuth: `chrome`, `edge`, or `firefox` |
-| `DSP_DEFAULT_SPACE` | Optional: your most-used space ID (agent uses this as default) |
-| `DSP_ENV_NAME` | Optional label for this environment, e.g. `dev`, `prod` |
+| `DSP_CLIENT_ID` | OAuth client ID |
+| `DSP_CLIENT_SECRET` | OAuth client secret |
+
+**Optional — provided by your administrator or left as defaults:**
+
+| Variable | Description | Default |
+|---|---|---|
+| `DSP_AUTHORIZATION_URL` | OAuth authorization endpoint | Derived from host if not set |
+| `DSP_TOKEN_URL` | OAuth token endpoint | Derived from host if not set |
+| `DSP_AUTHORIZATION_FLOW` | Login flow type | `authorization_code` |
+| `DSP_BROWSER` | Browser for OAuth popup: `chrome`, `edge`, or `firefox` | `edge` |
+| `DSP_DEFAULT_SPACE` | Your most-used space ID — agent uses this as fallback | _(none)_ |
+| `DSP_ENV_NAME` | Label for this environment, e.g. `dev`, `prod` | `dev` |
 
 ### Where to find your credentials
 
-1. Log in to [SAP BTP Cockpit](https://account.hana.ondemand.com/).
-2. Navigate to your subaccount → **Instances and Subscriptions**.
-3. Find your Datasphere service instance → **Service Bindings** or **Service Keys**.
-4. The binding JSON contains `clientid`, `clientsecret`, `url` (token URL), and `uaa.url` (authorization URL).
+All OAuth credentials come directly from your SAP Datasphere tenant — no BTP cockpit access needed:
+
+1. Log in to your SAP Datasphere tenant.
+2. Go to **System → Administration → App Integration**.
+3. Under **OAuth Clients**, create or select an OAuth client.
+4. Copy the **Client ID** → `DSP_CLIENT_ID`
+5. Copy the **Client Secret** → `DSP_CLIENT_SECRET`
+6. Your tenant URL (visible in the browser address bar) → `DSP_HOST`
 
 > **Security:** `.env` is listed in `.gitignore` and must never be committed. Share credentials with teammates via a secure secrets manager, not via this file.
 
@@ -173,84 +184,9 @@ You're ready to manage your Datasphere tenant with plain English.
 | `datasphere: command not found` | Run `npm install -g @sap/datasphere-cli` and restart your terminal |
 | `401 Unauthorized` on login | Say `"Log in again"` — the agent uses `--force` to refresh stale tokens |
 | Browser doesn't open during login | Check `DSP_BROWSER` in `.env` — must be `chrome`, `edge`, or `firefox` |
-| Missing `DSP_AUTHORIZATION_URL` | Find it in your BTP service binding under `uaa.url` + `/oauth/authorize` |
+| Missing `DSP_AUTHORIZATION_URL` | Find it in your Datasphere tenant under **System → Administration → App Integration** |
 | Node.js version error | Run `node --version` — must be 18 or later |
 | `npm` not found after Node install | Close and reopen your terminal, or restart your machine |
-
----
-
-## Next Steps
-
-- See the [Skills Reference](skills-reference.md) for the full list of commands and example prompts.
-- Add a new `skills/<domain>.SKILL.md` to teach the agent new commands.
-
-| Variable | Description |
-|---|---|
-| `DSP_HOST` | Your Datasphere tenant URL, e.g. `https://your-tenant.us21.hcs.cloud.sap` |
-| `DSP_CLIENT_ID` | OAuth client ID from SAP BTP cockpit |
-| `DSP_CLIENT_SECRET` | OAuth client secret from SAP BTP cockpit |
-| `DSP_AUTHORIZATION_URL` | OAuth authorization endpoint (from BTP service binding) |
-| `DSP_TOKEN_URL` | OAuth token endpoint (from BTP service binding) |
-| `DSP_AUTHORIZATION_FLOW` | Leave as `authorization_code` for browser-based login |
-| `DSP_BROWSER` | Browser to use for OAuth: `chrome`, `edge`, or `firefox` |
-| `DSP_DEFAULT_SPACE` | Optional: your most-used space ID (agent uses this as default) |
-| `DSP_ENV_NAME` | Optional label for this environment, e.g. `dev`, `prod` |
-
-### Where to find your credentials
-
-1. Log in to [SAP BTP Cockpit](https://account.hana.ondemand.com/).
-2. Navigate to your subaccount → **Instances and Subscriptions**.
-3. Find your Datasphere service instance → **Service Bindings** or **Service Keys**.
-4. The binding JSON contains `clientid`, `clientsecret`, `url` (token URL), and `uaa.url` (authorization URL).
-
-> **Security:** `.env` is listed in `.gitignore` and must never be committed. Share credentials with teammates via a secure secrets manager, not via this file.
-
----
-
-## 6. Open the Agent in VS Code
-
-1. Open Copilot Chat with `Ctrl+Alt+I` (Windows/Linux) or `Cmd+Alt+I` (macOS).
-2. Make sure you are in **Agent mode** — use the mode dropdown at the top of the chat panel (not Ask or Edit).
-3. Click the **agent picker** (`@` icon) and select **`datasphere-copilot`**.
-
-> If the agent doesn't appear, verify that the `.github/agents/` folder is present in the workspace root and that you are in Agent mode.
-
----
-
-## 7. Log In and Start Working
-
-Type your first instruction in plain English — for example:
-
-```
-Log in to the dev tenant
-```
-
-The agent reads your `.env` credentials and runs the appropriate CLI login command. Depending on your configured login flow, a browser window may open for OAuth authorization.
-
-Once authenticated, try any command:
-
-```
-List all spaces
-```
-
-```
-Create a local table ORDERS in space FINANCE with columns ORDER_ID INTEGER, CUSTOMER NVARCHAR(100)
-```
-
-You're ready to manage your Datasphere tenant with plain English.
-
----
-
-## Troubleshooting
-
-| Issue | Fix |
-|---|---|
-| Agent not visible in picker | Ensure VS Code is in Agent mode; verify `.github/agents/` folder exists |
-| `datasphere: command not found` | Run `npm install -g @sap/datasphere-cli` and restart your terminal |
-| `401 Unauthorized` on login | Say `"Log in again"` — the agent uses `--force` to refresh stale tokens |
-| Browser doesn't open during login | Check `DSP_BROWSER` in `.env` — must be `chrome`, `edge`, or `firefox` |
-| Missing `DSP_AUTHORIZATION_URL` | Find it in your BTP service binding under `uaa.url` + `/oauth/authorize` |
-| Node.js version error | Run `node --version` — must be 18 or later |
 
 ---
 
