@@ -34,24 +34,20 @@ Examples:
 
 All other temporary files (login options, payloads, etc.) go to the `tmp/` folder in the workspace root. Never write temporary files to the workspace root.
 
-## Login — Generate options file from .env
-For ALL login requests:
-1. Read `.env` and extract the `DSP_*` values.
-2. Write `tmp/env.json` with this exact structure:
-```json
-{
-  "host": "<DSP_HOST>",
-  "client-id": "<DSP_CLIENT_ID>",
-  "client-secret": "<DSP_CLIENT_SECRET>",
-  "authorization-url": "<DSP_AUTHORIZATION_URL>",
-  "token-url": "<DSP_TOKEN_URL>",
-  "authorization-flow": "<DSP_AUTHORIZATION_FLOW>",
-  "browser": "<DSP_BROWSER>"
-}
-```
-3. Run: `datasphere login --options-file tmp/env.json --force`
+## Login
+For ALL login requests, always run these two steps in order:
 
-`.env` is the single source of truth. `tmp/env.json` is regenerated from it on every login.
+**Step 1 — Recreate `tmp/env.json` from `.env`** (the `tmp/` folder is gitignored and may not exist):
+```powershell
+$e=@{};Get-Content .env|?{$_ -match '^DSP_'}|%{$k,$v=$_ -split '=',2;$e[$k]=$v};$j=[ordered]@{'client-id'=$e.DSP_CLIENT_ID;'client-secret'=$e.DSP_CLIENT_SECRET;'authorization-url'=$e.DSP_AUTHORIZATION_URL;'token-url'=$e.DSP_TOKEN_URL;'host'=$e.DSP_HOST;'browser'=$e.DSP_BROWSER;'authorization-flow'=$e.DSP_AUTHORIZATION_FLOW};if(!(Test-Path tmp)){New-Item -ItemType Directory tmp|Out-Null};$json=($j|ConvertTo-Json) -replace ':\s{2,}',': ';[System.IO.File]::WriteAllText((Join-Path (Get-Location) 'tmp\env.json'),$json,[System.Text.UTF8Encoding]::new($false))
+```
+
+**Step 2 — Login:**
+```
+datasphere login --options-file tmp/env.json --force
+```
+
+> Do NOT use `Set-Content -Encoding UTF8` — it adds a BOM that silently breaks the CLI JSON parser.
 
 ## Reply Format — Always Show Output
 After executing, reply with:

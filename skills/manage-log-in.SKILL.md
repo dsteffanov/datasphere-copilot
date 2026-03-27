@@ -40,21 +40,34 @@ datasphere login
 ```
 
 ### Login via options file (RECOMMENDED — use this always)
+
+**Step 1 — Always ensure `tmp/env.json` exists first.**
+The `tmp/` folder is gitignored and may not exist. Before every login, run this single PowerShell command to (re)create it from `.env`:
+
+```powershell
+$e=@{};Get-Content .env|?{$_ -match '^DSP_'}|%{$k,$v=$_ -split '=',2;$e[$k]=$v};$j=[ordered]@{'client-id'=$e.DSP_CLIENT_ID;'client-secret'=$e.DSP_CLIENT_SECRET;'authorization-url'=$e.DSP_AUTHORIZATION_URL;'token-url'=$e.DSP_TOKEN_URL;'host'=$e.DSP_HOST;'browser'=$e.DSP_BROWSER;'authorization-flow'=$e.DSP_AUTHORIZATION_FLOW};if(!(Test-Path tmp)){New-Item -ItemType Directory tmp|Out-Null};$json=($j|ConvertTo-Json) -replace ':\s{2,}',': ';[System.IO.File]::WriteAllText((Join-Path (Get-Location) 'tmp\env.json'),$json,[System.Text.UTF8Encoding]::new($false))
 ```
-datasphere login --options-file env.json --force
+
+This is safe to run even when the file already exists — it overwrites with fresh values.
+
+**Step 2 — Login:**
+```
+datasphere login --options-file tmp/env.json --force
 ```
 This is the only reliable approach when a cached token may be stale. Direct flags cause the CLI to attempt a token refresh (which fails with 401 if expired) instead of starting a fresh browser auth flow.
+
+> **Important:** `tmp/env.json` must be BOM-free UTF-8. The command above uses `[System.Text.UTF8Encoding]::new($false)` to guarantee no BOM. Never use PowerShell's `Set-Content -Encoding UTF8` — it adds a BOM that silently breaks the CLI parser. Also, `ConvertTo-Json` outputs two spaces after `:` — the `-replace` above normalises this to one space.
 
 Options file format (`tmp/env.json`, gitignored):
 ```json
 {
-  "client-id": "<id>",
-  "client-secret": "<secret>",
-  "authorization-url": "<url>",
-  "token-url": "<url>",
-  "host": "<url>",
-  "browser": "<browser-name>",
-  "authorization-flow": "<flow>"
+    "client-id": "<id>",
+    "client-secret": "<secret>",
+    "authorization-url": "<url>",
+    "token-url": "<url>",
+    "host": "<url>",
+    "browser": "<browser-name>",
+    "authorization-flow": "<flow>"
 }
 ```
 
