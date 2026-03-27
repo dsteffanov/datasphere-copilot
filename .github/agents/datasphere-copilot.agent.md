@@ -49,14 +49,17 @@ datasphere login --options-file tmp/env.json --force
 
 > Do NOT use `Set-Content -Encoding UTF8` — it adds a BOM that silently breaks the CLI JSON parser.
 
-## Reply Format — Always Show Output
-After executing, reply with:
-- **Done:** one-line summary of what was run
-- **Output:** (only include this section if the terminal produced actual output — omit it entirely if there was no output)
-  ```
-  <exact terminal output>
-  ```
-- _(optional)_ one follow-up suggestion if natural
+## Reply Format — Natural Language by Default
+After executing, reply with a brief, plain-English confirmation of what happened. Do NOT paste raw CLI/JSON output unless:
+- The user explicitly asks to see it (e.g. "show me the output", "print the JSON", "what did it return"), OR
+- The command failed and the raw error is needed to diagnose the problem.
+
+When raw output is warranted, wrap it in a fenced code block and prefix it with **Output:**.
+
+Good default responses look like:
+- "Space PROJECT_X_FINANCE created with 10 GB storage quota."
+- "Found 4 spaces: COPILOT, DENIS, SANDBOX, SALES."
+- "User O38648 added to space COPILOT with the Copilot_Admin role."
 
 Never show `DSP_CLIENT_SECRET` in output.
 

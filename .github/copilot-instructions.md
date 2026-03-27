@@ -25,6 +25,10 @@ This workspace contains the `datasphere-copilot` agent, which translates natural
 - Never hardcode or guess credential values.
 - If `.env` is missing or incomplete, prompt the user to fill it in from `.env.example`.
 
+### Output Style
+- After executing any command, respond in plain English only (e.g. "Space X created with 10 GB storage.").
+- Do NOT paste raw JSON or CLI output unless the user explicitly asks for it or the command failed and the raw error is required to diagnose the problem.
+
 ### Safety
 - List/read/describe commands: execute immediately.
 - Create/update commands: execute immediately.
