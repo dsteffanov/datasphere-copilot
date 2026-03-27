@@ -18,13 +18,7 @@ The SAP Datasphere CLI requires Node.js 18 or later.
 2. Run the installer and follow the prompts (default settings are fine).
 3. Open a new terminal window and verify the installation:
 
-**PowerShell / cmd:**
-```powershell
-node --version
 ```
-
-**macOS/Linux:**
-```bash
 node --version
 ```
 
@@ -36,13 +30,7 @@ You should see something like `v22.x.x`. If not, restart your terminal or rerun 
 
 Open a terminal and run:
 
-**PowerShell / cmd:**
-```powershell
-npm install -g @sap/datasphere-cli
 ```
-
-**macOS/Linux:**
-```bash
 npm install -g @sap/datasphere-cli
 ```
 
@@ -67,14 +55,7 @@ datasphere --version
 
 ## 4. Clone the Repo
 
-**PowerShell / cmd:**
-```powershell
-git clone https://github.com/dsteffanov/datasphere-copilot.git
-cd datasphere-copilot
 ```
-
-**macOS/Linux:**
-```bash
 git clone https://github.com/dsteffanov/datasphere-copilot.git
 cd datasphere-copilot
 ```
@@ -129,7 +110,7 @@ Open `.env` in VS Code (or any text editor). The file has the following variable
 
 ### Where to find your credentials
 
-All OAuth credentials come directly from your SAP Datasphere tenant — no BTP cockpit access needed:
+All OAuth credentials come directly from your SAP Datasphere tenant:
 
 1. Log in to your SAP Datasphere tenant.
 2. Go to **System → Administration → App Integration**.
@@ -147,8 +128,11 @@ All OAuth credentials come directly from your SAP Datasphere tenant — no BTP c
 1. Open Copilot Chat with `Ctrl+Alt+I` (Windows/Linux) or `Cmd+Alt+I` (macOS).
 2. Make sure you are in **Agent mode** — use the mode dropdown at the top of the chat panel (not Ask or Edit).
 3. Click the **agent picker** (`@` icon) and select **`datasphere-copilot`**.
+4. Select your preferred model using the model picker in the chat panel.
 
 > If the agent doesn't appear, verify that the `.github/agents/` folder is present in the workspace root and that you are in Agent mode.
+
+> **Model recommendation:** This agent has been extensively tested with models by Anthropic (Claude), which have shown great results in translating natural language to accurate CLI commands. Note that Anthropic models may come at a higher cost depending on your Copilot plan — check your billing settings before switching.
 
 ---
 
