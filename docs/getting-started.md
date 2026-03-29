@@ -125,14 +125,16 @@ All OAuth credentials come directly from your SAP Datasphere tenant:
 
 ## 6. Open the Agent in VS Code
 
-1. Open Copilot Chat with `Ctrl+Alt+I` (Windows/Linux) or `Cmd+Alt+I` (macOS).
-2. Make sure you are in **Agent mode** — use the mode dropdown at the top of the chat panel (not Ask or Edit).
-3. Click the **agent picker** (`@` icon) and select **`datasphere-copilot`**.
-4. Select your preferred model using the model picker in the chat panel.
+1. Press `Ctrl+Alt+I` (Windows/Linux) or `Cmd+Alt+I` (macOS) to open Copilot Chat.
+2. In the chat panel (below the prompt), directly pick **datasphere-copilot** as the agent (you can also use `Ctrl+.` as a shortcut).
+3. Select your preferred model, or keep it as Auto to reduce cost.
 
-> If the agent doesn't appear, verify that the `.github/agents/` folder is present in the workspace root and that you are in Agent mode.
 
-> **Model recommendation:** This agent has been extensively tested with models by Anthropic (Claude), which have shown great results in translating natural language to accurate CLI commands. Note that Anthropic models may come at a higher cost depending on your Copilot plan — check your billing settings before switching.
+> If the agent doesn't appear, verify that the `.github/agents/` folder is present in the workspace root.
+
+> **Model recommendation:** In my experience, Claude Sonnet 4.6 and GPT-5.3-Codex delivered the most consistent results for this type of code generation.
+> 
+> When choosing your Copilot model, keep in mind that accuracy can vary, especially with complex commands and payloads. It’s also worth tracking your premium request quota, as different models and reasoning settings can significantly increase costs.
 
 ---
 
