@@ -105,7 +105,7 @@ Default (no `--accept`) returns the simple list.
 ## Verified Example — Add Single User
 
 ```json
-[{"id": "O38648", "roles": ["PROFILE:t.CQ7TNL:Copilot_Admin"]}]
+[{"id": "<USER_ID>", "roles": ["PROFILE:<package>:<role_name>"]}]
 ```
 
 ## Verified Example — Add Multiple Users
@@ -114,5 +114,38 @@ Default (no `--accept`) returns the simple list.
 [
   {"id": "USER1", "roles": ["PROFILE:t.CQ7TNL:Sandbox_Admin"]},
   {"id": "USER2", "roles": ["PROFILE:t.CQ7TNL:Sandbox_Admin"]}
+]
+```
+
+## Remove Users from a Space
+
+**⚠ DIFFERENT schema from add — uses `"role"` (singular string), NOT `"roles"` (array).**
+
+The `mass-delete` endpoint enforces a stricter schema: each entry must have `id` and `role` (singular string). Using `roles` (array) will fail with a `validateApiSchema` error.
+
+**Payload format:**
+```json
+[
+  {"id": "<USER_ID>", "role": "PROFILE:<package>:<role_name>"}
+]
+```
+
+### Critical Rules for Remove
+
+1. **Use `"role"` (singular string)**, NOT `"roles"` (array)
+2. One object per user-role pair — if a user has multiple roles, repeat the entry for each role
+
+### Verified Example — Remove Single User
+
+```json
+[{"id": "<USER_ID>", "role": "PROFILE:<package>:<role_name>"}]
+```
+
+### Verified Example — Remove Multiple Users
+
+```json
+[
+  {"id": "USER1", "role": "PROFILE:t.CQ7TNL:Sandbox_Admin"},
+  {"id": "USER2", "role": "PROFILE:t.CQ7TNL:Sandbox_Admin"}
 ]
 ```

@@ -1,4 +1,9 @@
-# Skill: Manage Connectivity
+---
+name: manage-connectivity
+description: 'Use when managing TLS certificates or data source connections in SAP Datasphere spaces. Covers listing, creating, validating, editing, and deleting connections and certificates.'
+---
+
+# Manage Connectivity
 
 ## Supported Intents
 - List TLS certificates

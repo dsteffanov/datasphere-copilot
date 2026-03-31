@@ -1,4 +1,9 @@
-# Skill: Manage Global Roles
+---
+name: manage-global-roles
+description: 'Use when listing global roles or managing user assignments to global roles in SAP Datasphere. Covers listing roles, adding users, and removing users from global roles.'
+---
+
+# Manage Global Roles
 
 ## Supported Intents
 - List global roles
@@ -45,5 +50,5 @@ datasphere global-roles users remove
 ## Examples
 - "List all global roles"
 - "List users in global role DW_Administrator"
-- "Add user O38648 to global role DW_Modeler"
+- "Add user JSMITH to global role DW_Modeler"
 - "Remove user O57187 from global role DW_Consumer"

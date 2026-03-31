@@ -1,4 +1,9 @@
-# Skill: Manage Scoped Roles
+---
+name: manage-scoped-roles
+description: 'Use when listing, creating, updating, or deleting scoped roles in SAP Datasphere. Also covers adding/removing users and spaces (scopes) to scoped roles, and the workflow for granting isolated space access.'
+---
+
+# Manage Scoped Roles
 
 ## Supported Intents
 - List scoped roles
@@ -175,7 +180,7 @@ See `.github/instructions/scoped-roles.instructions.md` for more details.
 - "List all scoped roles"
 - "Read scoped role DW_MODELER_ROLE"
 - "Create a scoped role Copilot_Admin for space COPILOT"
-- "Add user O38648 to scoped role Copilot_Admin for space COPILOT"
+- "Add user JSMITH to scoped role Copilot_Admin for space COPILOT"
 - "Add space COPILOT to scoped role Sandbox_Admin"
 - "Remove space SANDBOX from scoped role ANALYST_ROLE"
 - "Delete scoped role OLD_ROLE"

@@ -8,7 +8,7 @@ This workspace contains the `datasphere-copilot` agent, which translates natural
 |---|---|
 | `.github/agents/datasphere-copilot.agent.md` | Custom agent definition |
 | `.github/instructions/*.instructions.md` | Object-type-specific payload references (loaded on-demand) |
-| `skills/*.SKILL.md` | Domain-specific CLI command playbooks |
+| `.github/skills/<name>/SKILL.md` | Domain-specific CLI command playbooks |
 | `docs/` | Reference documentation for each command area |
 | `.env` | Active credentials (never commit) |
 | `.env.example` | Credential template to share with team |
@@ -16,7 +16,7 @@ This workspace contains the `datasphere-copilot` agent, which translates natural
 ## Rules That Apply to All Agents in This Workspace
 
 ### Skills Are Authoritative
-- Before generating any Datasphere CLI command, load the matching `skills/*.SKILL.md` file.
+- Before generating any Datasphere CLI command, load the matching `.github/skills/<name>/SKILL.md` file.
 - Skill command templates override any general LLM knowledge about CLI flags.
 - If no matching skill exists, proceed using built-in CLI knowledge — never block.
 
@@ -37,8 +37,9 @@ This workspace contains the `datasphere-copilot` agent, which translates natural
 - Never ask the user to copy and run a command manually. The agent always runs commands itself in the terminal, including any follow-up or analysis commands.
 
 ## Extending the Agent
-- Add new `skills/<domain>.SKILL.md` files to support new command areas.
-- Mirror the structure of existing skill files: intents, CLI templates, parameters table, safety notes.
+- Add new `.github/skills/<domain>/SKILL.md` folders to support new command areas.
+- Mirror the structure of existing skill files: YAML frontmatter, intents, CLI templates, parameters table, safety notes.
+- Add matching `.github/instructions/<topic>.instructions.md` files for detailed payload schemas.
 - Update `.env.example` if new environment variables are needed.
 
 ## Example Prompts

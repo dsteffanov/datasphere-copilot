@@ -1,4 +1,9 @@
-# Skill: Manage Data Marketplace
+---
+name: manage-data-marketplace
+description: 'Use when managing data providers, data products, activation keys, licenses, releases, or contexts in the SAP Datasphere Data Marketplace.'
+---
+
+# Manage Data Marketplace
 
 ## Supported Intents
 - List data providers

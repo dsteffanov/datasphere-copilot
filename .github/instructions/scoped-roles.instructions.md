@@ -98,7 +98,7 @@ Role definition (`tmp/scoped-role-Copilot_Admin.json`):
 
 User assignment (`tmp/role-Copilot_Admin-users.json`):
 ```json
-[{"id": "O38648", "scopes": ["COPILOT"]}]
+[{"id": "<USER_ID>", "scopes": ["<SPACE_ID>"]}]
 ```
 
 Commands executed:

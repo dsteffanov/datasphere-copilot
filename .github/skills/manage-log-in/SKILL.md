@@ -1,4 +1,9 @@
-# Skill: Manage Log In
+---
+name: manage-log-in
+description: 'Use when logging in, logging out, setting or showing the host, managing secrets/tokens, initializing CLI cache, or handling passcode-based authentication for SAP Datasphere.'
+---
+
+# Manage Log In
 
 ## Supported Intents
 - Log in to tenant

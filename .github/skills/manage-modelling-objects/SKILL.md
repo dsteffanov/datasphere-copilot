@@ -1,4 +1,9 @@
-# Skill: Manage Modelling Objects
+---
+name: manage-modelling-objects
+description: 'Use when listing, creating, reading, updating, deploying, or deleting SAP Datasphere modelling objects: local tables, views, data flows, replication flows, transformation flows, task chains, analytic models, business entities, fact models, consumption models, data access controls, ER models, intelligent lookups, and remote tables.'
+---
+
+# Manage Modelling Objects
 
 ## Supported Intents
 - List objects of a type in a space
@@ -43,22 +48,31 @@ datasphere objects <object-type> read
 ```
 datasphere objects <object-type> create
   --space <id>
-  --file-path <file>.json | --input '<stringified-json>'
+  --file-path <file>.json
   [--allow-missing-dependencies]   # Allow save even if dependencies are missing
   [--custom-validation-options allowRevertReleaseState:true]
   [--save-anyway]     # Save even with validation warnings
   [--no-deploy]       # Save without deploying
+  [--verbose]    # Shows HTTP request/response — always add when debugging failures
 ```
 > **Note:** The technical name is defined inside the JSON payload, not as a CLI flag on create.
 
+> **Always use `--file-path`, not `--input`.** The `--input` flag is unreliable in PowerShell due to JSON escaping issues between PowerShell and the CLI's Node.js argument parser. Always write JSON to a file in `tmp/` and use `--file-path`.
+
+> **Always add `--verbose` on create.** Without it, failures produce zero diagnostic info (just "Failed to create an object from a JSON file or input string"). With `--verbose`, the full HTTP URL, status code, and error body are printed.
+
+> **Pre-requisite — Space must have a user with a scoped role.** If the target space was just created, object create/update/delete will fail (often with opaque TLS or connection errors, not clear permission messages). Before creating objects in a new space, ensure a scoped role exists for that space and the current user is assigned to it. Use the `manage-spaces` and `manage-scoped-roles` skills to set this up.
+
 > **Schema Bootstrap:** If the payload structure is unclear or the command fails with a schema/validation error, find an existing object of the same type in the same space, read its definition, and use it as a structural reference to build or correct the payload.
+
+> **Object already exists?** If the error says "An object with this name already exists. To update it, use the update command", switch to `objects <type> update --space <id> --technical-name <name> --file-path <file>.json` instead of re-creating.
 
 ### Update an Object
 ```
 datasphere objects <object-type> update
   --space <id>
   --technical-name <name>
-  --file-path <absolute-path-to-file>.json | --input '<stringified-json>'
+  --file-path <absolute-path-to-file>.json
   [--custom-validation-options allowRevertReleaseState:true]
   [--save-anyway]
   [--no-deploy]
@@ -66,11 +80,13 @@ datasphere objects <object-type> update
   [--verbose]    # Shows HTTP request/response — always add when debugging failures
 ```
 
-> **CRITICAL — Always use absolute paths with `--file-path`.** Relative paths silently fail with "Failed to read content from file". Use the full workspace-rooted path, e.g. `C:\Users\...\tmp\Fiscal_Weeks.json`.
+> **CRITICAL — Always use absolute paths with `--file-path` on update.** Relative paths silently fail with "Failed to read content from file". Use the full workspace-rooted path, e.g. `C:\Users\...\tmp\Fiscal_Weeks.json`.
 
 > **Validate JSON before submitting.** Run `node -e "JSON.parse(require('fs').readFileSync('tmp/file.json','utf8')); console.log('valid')"` before every update. Patching a JSON file can introduce duplicate keys that break parsing silently in some tools (PowerShell's `ConvertFrom-Json`) but are caught correctly by Node.js.
 
-> **Use `--verbose` to diagnose failures.** It prints the full HTTP PUT URL, request, and response. An SSL fallback warning (`fallback to TLSv1.2`) is harmless — the update still succeeds if the response is `204 No Content`.
+> **Use `--verbose` to diagnose failures.** It prints the full HTTP URL, request, and response. An SSL fallback warning (`fallback to TLSv1.2`) is harmless — the operation still succeeds if the response is `200 OK` or `204 No Content`.
+
+> **TLS retry — don't panic on EPROTO.** The CLI may log `write EPROTO ... ssl3_read_bytes ... tlsv1 alert protocol version` on every write (POST/PUT). This is the initial TLS 1.3 handshake failing before the CLI retries with TLS 1.2. If the next line shows `200 OK (fallback to TLSv1.2)` or `204 No Content (fallback to TLSv1.2)`, the operation succeeded. If the fallback itself fails, retry the command once — transient network conditions can prevent the fallback from triggering.
 
 ### Delete an Object
 ```

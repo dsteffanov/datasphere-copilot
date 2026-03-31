@@ -1,4 +1,9 @@
-# Skill: Manage Users
+---
+name: manage-users
+description: 'Use when listing, creating, updating, or deleting tenant-level users in SAP Datasphere. For role-specific operations use manage-global-roles or manage-scoped-roles instead.'
+---
+
+# Manage Users
 
 ## Supported Intents
 - List all users
@@ -6,8 +11,8 @@
 - Update users
 - Delete users
 
-> For global role operations, see `manage-global-roles.SKILL.md`.
-> For scoped role operations, see `manage-scoped-roles.SKILL.md`.
+> For global role operations, see the `manage-global-roles` skill.
+> For scoped role operations, see the `manage-scoped-roles` skill.
 
 ## CLI Command Templates
 

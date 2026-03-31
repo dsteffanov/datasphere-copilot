@@ -1,4 +1,9 @@
-# Skill: Manage Spaces
+---
+name: manage-spaces
+description: 'Use when listing, creating, reading, updating, or deleting SAP Datasphere spaces. Also covers managing space users, database users (HDI), and workload priorities.'
+---
+
+# Manage Spaces
 
 ## Supported Intents
 - List all spaces
@@ -154,6 +159,12 @@ Key rules:
 - `assignedStorage` and `assignedRam` are in bytes (2000000000 = ~2 GB)
 - `version` should be `"1.0.4"`
 
+> **CRITICAL — Post-Creation Setup:** A newly created space has no users and no scoped roles. Until a scoped role is created, scoped to the space, and the current user is assigned, **all object-level operations (create, update, delete) in that space will fail** with TLS/authorization errors that may appear as SSL connection issues rather than clear permission errors. Always perform these steps immediately after creating a space:
+> 1. Create a scoped role for the space → `scoped-roles create` (use `manage-scoped-roles` skill)
+> 2. Add the space as a scope → `scoped-roles scopes add --role <role_id> --scopes <SPACE_ID>`
+> 3. Add the current user → `scoped-roles users add --role <role_id>` with `[{"id":"<USER_ID>","scopes":["<SPACE_ID>"]}]`
+> 4. Add the user to the space with the role → `spaces users add --space <SPACE_ID>` with `[{"id":"<USER_ID>","roles":["<role_id>"]}]`
+
 ### Add Users to a Space
 
 ```json
@@ -179,12 +190,16 @@ Key rules:
 
 ### Remove Users from a Space
 
-Same payload format as add:
+**DIFFERENT format from add** — uses `"role"` (singular string), NOT `"roles"` (array):
 ```json
 [
-  {"id": "<USER_ID>", "roles": ["PROFILE:<package>:<role_name>"]}
+  {"id": "<USER_ID>", "role": "PROFILE:<package>:<role_name>"}
 ]
 ```
+
+**CRITICAL rules:**
+- Use `"role"` (singular string), NOT `"roles"` (array) — the API enforces this schema strictly and will return a `validateApiSchema` error if `roles` is used
+- One entry per user-role assignment
 
 See `.github/instructions/spaces.instructions.md` for more details on space payloads and user management patterns.
 
@@ -204,7 +219,7 @@ See `.github/instructions/spaces.instructions.md` for more details on space payl
 - "Create a space from sales_space.json"
 - "Delete space OLD_SPACE"
 - "List users in space MARKETING"
-- "Add user O38648 to space COPILOT"
+- "Add user JSMITH to space COPILOT"
 - "Add users to space SALES from users.json"
 - "Remove users from space DEMO"
 - "List database users in space DEV"

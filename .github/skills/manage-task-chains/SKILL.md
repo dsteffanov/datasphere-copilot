@@ -1,4 +1,9 @@
-# Skill: Manage Task Chains and Tasks
+---
+name: manage-task-chains
+description: 'Use when running task chains, managing replication flows, checking task logs, or handling scheduled task consent in SAP Datasphere. Covers run, stop, status, logs, and consent operations.'
+---
+
+# Manage Task Chains and Tasks
 
 ## Supported Intents
 - Run a task chain
