@@ -144,10 +144,16 @@ Manages scoped role definitions and their user/space assignments.
 
 ---
 
+## Repository Layout
+
+For the full folder tree, conventions, and how the agent works end-to-end, see [AGENTS.md](../AGENTS.md).
+
+---
+
 ## Adding a New Skill
 
 If the agent says a skill doesn't exist for your request:
 
-1. Create `skills/<domain>.SKILL.md` — copy the structure of an existing skill file.
-2. Add the intents, CLI command templates, and parameter table.
+1. Create `.github/skills/<domain>/SKILL.md` — copy the structure of an existing skill folder (e.g., `manage-spaces/SKILL.md`).
+2. Add YAML frontmatter (`name`, `description`), intents, CLI command templates, and a parameter table.
 3. The agent will discover and use it automatically on the next request.
